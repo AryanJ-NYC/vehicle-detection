@@ -1,0 +1,6 @@
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Video and images provided by Udacity
+*.mp4
+*.jpg

@@ -26,7 +26,9 @@ As recommended by Udacity, its forums and members of its Slack channel, I used t
 ### Color Histogram
 The fourth code cell of the Jupyter notebook features functions to extract color histogram features.
 
-I used the RGB color space and chose 32 bins (as was used in the Udacity lessons).  I did not tune this parameter (as I did not find a need to).
+I used the RGB color space and chose 32 bins (as is used in the Udacity lessons).  I did not tune this parameter (as I did not find a need to).
+
+![Color Histogram](./color-histogram.png)
 
 ### Spatial binning
 The training image itself became a feature.  When classifying, I resized each window to 64x64 and used that as its features.
@@ -53,14 +55,16 @@ It took a long time to search all five window sizes.  I settled on three window 
 
 Using these three window sizes with a 75% overlap resulted in finding all cars (including one oncoming car on the other side of the median) in the test images.
 
-To avoid duplicate detections and false positives, a heat map was created.  This heat map started purely black (0) and, for each detected window, the entire span would have 1 added to it.  A threshold of 1 was used to ignore those parts of the heat map with only 1 or 0.  The rest of the map was labeled and a bounding box was drawn over a rectangular portion of the heat map.
+To avoid duplicate detections and false positives, a heat map is created.  This heat map started purely black (0) and, for each detected window, the entire span would have 1 added to it.  A threshold of 1 is used to ignore those parts of the heat map with only 1 or 0.  The rest of the map is labeled and a bounding box is drawn over a rectangular portion of the heat map.
+
+As the video plays, a deque of heat maps is collected with a max length of 10.  When the same pixels in consecutive frames are classified as a car, those pixels "heat up" and remain selected.  However, false positives will remain cool since they are likely to be classified as a car once over a long period of time.
 
 The following are test images with boxes drawn over the detected cars (where the heat map went over 1):
 ![Detected Vehicles](./detected-vehicles.png)
 
 ## Conclusion
-The video featured lines that resized often.  Additionally, when the second car came into the frame, the two cars were grouped into one box (with one label).  These inconsistencies resulted from the use of a heat map.
+The video featured boxes that resized often.  Additionally, when the second car came into the frame, the two cars were grouped into one box (with one label).  These inconsistencies resulted from the use of a heat map.
 
 I believe this can be remedied by saving the centroid of the vehicle and calculating an estimate of where that centroid will be.  Then, the bounding box can remain constant or change sizes given the distance of the centroid.
 
-The final video was uploaded to [YouTube](https://www.youtube.com/watch?v=QdP59fDmkH8).
+The final video was uploaded to [YouTube](https://www.youtube.com/watch?v=QMSmGfz22Cs).
